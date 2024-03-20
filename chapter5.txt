@@ -1,0 +1,68 @@
+----------create table with default on null
+create table emp (id number(10), name VARCHAR(40),salary number default on null 100);
+insert into emp values(101,'ali',null);
+select * from emp;
+
+------------using subquery to create table
+
+create table shaq
+as
+select employee_id emp_id,first_name,salary,hire_date as "joindate"
+from employees;
+select * from shaq;
+
+-------------alter table statement
+alter table shaq add empage int default 25;
+alter table shaq modify empage number not null;
+alter table shaq rename column salary to sal;
+alter table shaq drop column empage;
+
+-------------unused option
+alter table shaq set unused (empage);
+insert into shaq values('gedi',12000,'12-jun-04');
+set colinvisible on
+desc shaq
+set colinvisible off
+select * from user_unused_col_tabs;
+
+alter table shaq read only;
+alter table shaq read write;
+------------drop table
+drop table shaq;
+show recyclebin;
+flashback table shaq to before drop;
+drop table shaq purge;
+
+------------ constraints
+CREATE TABLE teach_emp (
+         empno      NUMBER(5) PRIMARY KEY,
+         ename      VARCHAR2(15) NOT NULL,
+         job        VARCHAR2(10),
+         mgr        NUMBER(5),
+         hiredate   DATE DEFAULT (sysdate),
+         sal        NUMBER(7,2) check (sal>100),
+         deptno     NUMBER(3) NOT NULL
+                     CONSTRAINT admin_dept_fkey REFERENCES
+                      departments(department_id));
+
+-----------constraint at column level
+create table emp1 (id number
+constraint ipk primary key,
+firstname varchar(30) not null);
+
+-----------constraint at table level
+CREATE TABLE emp3(
+  employee_id  NUMBER(6),
+  first_name   VARCHAR2(20),
+  job_id       VARCHAR2(10) NOT NULL,
+  CONSTRAINT emp_id_pk 
+    PRIMARY KEY (employee_id),
+    constraint unif 
+    unique (first_name));
+
+----------foreign key
+create table emply (id number,
+name varchar2(20),
+deptno number,
+constraint fk_emply foreign key (deptno) references
+departments(department_id));

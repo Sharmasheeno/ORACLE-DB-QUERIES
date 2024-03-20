@@ -1,0 +1,130 @@
+-------fetch and offset clause
+select employee_id,first_name,salary,department_id
+from employees
+order by salary desc
+fetch first 5 rows only;
+
+select employee_id,first_name,salary,department_id
+from employees
+order by  department_id
+offset 2 rows
+fetch first 5 rows with ties;
+
+select employee_id,first_name,salary,department_id
+from employees
+order by  department_id
+fetch first 10 percent rows only;
+------ rowid and rownum
+
+select employee_id,rowid from employees;
+
+select employee_id,rownum from employees;
+
+--------column alias and concatenation
+select employee_id,first_name name,commission_pct ,
+12*salary*commission_pct  "annsal salary"
+from employees;
+
+select first_name||last_name from employees;
+select first_name||' is son of '||last_name from employees;
+----------distinct keywoard
+select distinct department_id from employees;
+---------- arithmatic expression
+select 10*(12/3-1) from dual;
+select 10*12/3-1 from dual;
+
+select salary ,salary+300 from employees;
+select salary ,12*salary+300 from employees;
+select salary ,12*(salary+300) from employees;
+
+----------comparison and logical operators
+select employee_id,first_name,salary,department_id
+from employees
+where salary>=10000;
+
+SELECT last_name, salary
+FROM   employees
+WHERE  salary BETWEEN 2500 AND 3500;
+
+SELECT last_name, salary
+FROM   employees
+WHERE  salary in( 2500 ,3500);
+
+SELECT last_name, salary
+FROM   employees
+WHERE  salary not in( 2500 ,3500);
+
+select * from employees where manager_id is null;
+select * from employees where manager_id is not null;
+
+select * from employees 
+where first_name like 'A%';
+
+select * from employees 
+where first_name like '%a';
+
+select * from employees 
+where first_name like '__a%';
+
+select * from employees 
+where first_name like '%e%';
+
+select FIRST_NAME ,JOB_ID from employees 
+where job_id like 'SA\_%' ESCAPE '\';
+
+----------logical operators
+
+SELECT employee_id, last_name, job_id, salary
+FROM   employees
+WHERE  salary >= 10000
+AND    job_id LIKE '%MAN%'; 
+
+SELECT employee_id, last_name, job_id, salary
+FROM   employees
+WHERE  salary >= 10000
+or    job_id LIKE '%MAN%';
+
+SELECT last_name, job_id, salary
+FROM   employees
+WHERE  job_id = 'SA_REP'
+OR     job_id = 'AD_PRES'
+AND    salary > 15000;
+
+SELECT last_name, job_id, salary
+FROM   employees
+WHERE  (job_id = 'SA_REP'
+OR     job_id = 'AD_PRES')
+AND    salary > 15000;
+
+---------substitution variables
+
+SELECT employee_id, last_name, salary, department_id
+FROM   employees
+WHERE  employee_id = &employee_num ;
+
+SELECT employee_id, last_name, job_id,&column_name
+FROM   employees
+WHERE  &condition
+ORDER BY &order_column ;
+
+SELECT   employee_id, last_name, job_id, &&column_name
+FROM     employees
+ORDER BY &column_name ;
+
+---------define and undefine command
+DEFINE employee_num = 200
+
+SELECT employee_id, last_name, salary, department_id
+FROM   employees
+WHERE  employee_id = &employee_num ;
+
+UNDEFINE employee_num
+
+---------verify command
+SET VERIFY ON
+SELECT employee_id, last_name, salary
+FROM   employees
+WHERE  employee_id = &employee_num;
+
+--------describe command
+describe employees

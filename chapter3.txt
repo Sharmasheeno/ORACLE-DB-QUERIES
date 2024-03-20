@@ -1,0 +1,66 @@
+show con_name
+show user
+------------common user
+
+create user c##ca212 identified by ca212 container=all
+
+grant create session,connect to c##ca212
+
+grant create table, create view to c##ca212
+
+alter user c##ca212 quota 5m on users
+
+-----------another common user 
+create user C##hall1 identified by hall1 quota 2m on users 
+
+grant create session, connect ,create table to c##hall1
+
+----------local user
+alter session set container=orclpdb
+show con_name
+
+create user somali identified by somali quota 3m on users container=current
+
+grant create session,connect,create table to somali
+
+revoke create table from somali
+
+-------------common role
+alter session set container=cdb$root
+
+create role C##manager
+
+grant connect,create session,create table  to C##manager
+
+grant c##manager to c##ca212
+grant c##manager to c##hall1
+
+-----------local role 
+alter session set container=orclpdb
+create role manager
+
+grant connect,create session,create table to manager
+
+grant manager to somali
+
+-----------object privileges
+-----granting privileges
+GRANT  select
+ON     hr.employees
+TO     somali
+
+GRANT  update 
+ON     hr.departments
+TO     somali;
+
+GRANT  select, insert
+ON     hr.departments
+TO     somali
+WITH   GRANT OPTION;
+
+--------revoking privileges
+
+REVOKE  select, insert
+ON      hr.departments
+FROM    demo;
+
